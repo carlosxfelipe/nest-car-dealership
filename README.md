@@ -65,14 +65,7 @@ $ pnpm run test:cov
 
 Quando você estiver pronto para implantar (deploy) seu aplicativo NestJS em produção, há alguns passos importantes que você pode seguir para garantir que ele rode o mais eficientemente possível. Confira a [documentação de implantação](https://docs.nestjs.com/deployment) para obter mais informações.
 
-Se você está procurando uma plataforma em nuvem para implantar seu aplicativo NestJS, confira o [Mau](https://mau.nestjs.com), nossa plataforma oficial para a implantação de aplicativos NestJS na AWS. O Mau torna a implantação direta e rápida, exigindo apenas alguns passos simples:
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
-
-Com o Mau, você pode implantar seu aplicativo em apenas alguns cliques, permitindo que você se concentre na construção de recursos em vez de gerenciar infraestrutura.
 
 ## Licença
 
