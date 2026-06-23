@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { Car } from './interfaces/car.interface';
 import { CreateCarDto, UpdateCarDto } from './dto';
@@ -37,26 +41,28 @@ export class CarsService {
     return car;
   }
 
-  create(dto: CreateCarDto) {
-    const car: Car = { id: randomUUID(), ...dto };
+  create(createCarDto: CreateCarDto) {
+    const car: Car = { id: randomUUID(), ...createCarDto };
     this.cars.push(car);
     return car;
   }
 
-  update(id: string, dto: UpdateCarDto) {
+  update(id: string, updateCarDto: UpdateCarDto) {
+    if (updateCarDto.id && updateCarDto.id !== id) {
+      throw new BadRequestException(
+        `O ID do carro não pode ser alterado no corpo da requisição.`,
+      );
+    }
+
     const car = this.findOneById(id);
-    Object.assign(car, dto);
+    car.brand = updateCarDto.brand ?? car.brand;
+    car.model = updateCarDto.model ?? car.model;
+
     return car;
   }
 
-  deleteOneById(id: string) {
-    const index = this.cars.findIndex((car) => car.id === id);
-
-    if (index === -1) {
-      throw new NotFoundException(`Carro com id ${id} não encontrado.`);
-    }
-
-    const deleted = this.cars.splice(index, 1)[0];
-    return deleted;
+  delete(id: string) {
+    this.findOneById(id);
+    this.cars = this.cars.filter((car) => car.id !== id);
   }
 }
