@@ -1,20 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { Car } from './interfaces/car.interface';
+import { CreateCarDto, UpdateCarDto } from './dto';
 
 @Injectable()
 export class CarsService {
-  private cars = [
+  private cars: Car[] = [
     {
-      id: 1,
+      id: randomUUID(),
       brand: 'Toyota',
       model: 'Corolla',
     },
     {
-      id: 2,
+      id: randomUUID(),
       brand: 'Honda',
       model: 'Civic',
     },
     {
-      id: 3,
+      id: randomUUID(),
       brand: 'Jeep',
       model: 'Cherokee',
     },
@@ -24,7 +27,7 @@ export class CarsService {
     return this.cars;
   }
 
-  findOneById(id: number) {
+  findOneById(id: string) {
     const car = this.cars.find((car) => car.id === id);
 
     if (!car) {
@@ -32,5 +35,28 @@ export class CarsService {
     }
 
     return car;
+  }
+
+  create(dto: CreateCarDto) {
+    const car: Car = { id: randomUUID(), ...dto };
+    this.cars.push(car);
+    return car;
+  }
+
+  update(id: string, dto: UpdateCarDto) {
+    const car = this.findOneById(id);
+    Object.assign(car, dto);
+    return car;
+  }
+
+  deleteOneById(id: string) {
+    const index = this.cars.findIndex((car) => car.id === id);
+
+    if (index === -1) {
+      throw new NotFoundException(`Carro com id ${id} não encontrado.`);
+    }
+
+    const deleted = this.cars.splice(index, 1)[0];
+    return deleted;
   }
 }

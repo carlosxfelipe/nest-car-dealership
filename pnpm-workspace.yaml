@@ -1,3 +1,5 @@
+allowBuilds:
+  '@nestjs/core': set this to true or false
 # Quarantine newly published packages to prevent supply chain attacks and early bugs.
 # 10080 minutes = 7 days.
 minimumReleaseAge: 10080
